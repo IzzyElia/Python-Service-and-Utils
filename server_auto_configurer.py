@@ -4,7 +4,7 @@ import subprocess
 import sys
 
 # Function to run shell commands
-def run_command(command, print_output):
+def run_command(command, print_output=True):
     process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     if process.returncode == 0:
@@ -23,6 +23,7 @@ def check_and_install_dotenv():
         print("python-dotenv not found, installing it now...")
         subprocess.run([sys.executable, '-m', 'pip', 'install', 'python-dotenv'], check=True)
         import dotenv  # Import after installing
+
 
 # Now we call the function to make sure python-dotenv is installed
 check_and_install_dotenv()
