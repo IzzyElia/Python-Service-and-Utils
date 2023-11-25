@@ -1,6 +1,7 @@
 # spotipy_authenticator.py
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import os
 
 # Function to load authentication details from a file
 def load_auth_details(auth_file):
@@ -13,13 +14,22 @@ def load_auth_details(auth_file):
     return auth_details
 
 # Function to initialize the Spotify client with broad scope
-def init_spotipy_client(auth_file='spotify-auth.txt'):
-    auth_details = load_auth_details(auth_file)
+def init_spotipy_client(config_file='config.txt'):
+    config_details = load_auth_details(config_file)
     try:
+        client_secret = os.environ['SPOTIFY_SECRET']
+    except KeyError:
+        raise KeyError("Environment variable 'SPOTIFY_SECRET' is not set")
+    try:
+        client_id = os.environ['SPOTIFY_CLIENT_ID']
+    except KeyError:
+        raise KeyError("Environment variable 'SPOTIFY_CLIENT_ID' is not set")
+    try:
+
         spotify_client = spotipy.Spotify(auth_manager=SpotifyOAuth(
-            client_id=auth_details['client_id'],
-            client_secret=auth_details['client_secret'],
-            redirect_uri=auth_details['redirect_uri'],
+            client_id=client_id,
+            client_secret=client_secret,
+            redirect_uri=config_details['redirect_uri'],
             scope=" ".join([
                 "ugc-image-upload",
                 "user-read-recently-played",
@@ -40,7 +50,7 @@ def init_spotipy_client(auth_file='spotify-auth.txt'):
                 "user-read-email",
                 "user-read-private"
             ]),
-            cache_path=auth_details.get('cache_path', '.spotipyoauthcache')
+            cache_path=config_details.get('cache_path', '.spotipyoauthcache')
         ))
         return spotify_client
     except KeyError as e:
