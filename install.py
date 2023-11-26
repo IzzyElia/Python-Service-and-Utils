@@ -16,27 +16,7 @@ def run_command(command, print_output=True):
     return process.stdout.strip()
 
 
-def write_env_variables(path, spotify_client_id, spotify_secret):
-    # Read the current lines from the .env file
-    if os.path.exists(path):
-        with open(path, 'r') as file:
-            lines = file.readlines()
-    else:
-        lines = []
-
-    # Create a dictionary to hold the current environment variables
-    env_vars = {line.split('=')[0]: line for line in lines if '=' in line}
-
-    # Update the dictionary with the new values
-    env_vars['SPOTIFY_CLIENT_ID'] = f'SPOTIFY_CLIENT_ID="{spotify_client_id}"\n'
-    env_vars['SPOTIFY_SECRET'] = f'SPOTIFY_SECRET="{spotify_secret}"\n'
-
-    # Write the updated values back to the .env file
-    with open(path, 'w') as file:
-        for key in env_vars:
-            file.write(env_vars[key])
-
-#Check if variable
+#Check if variable exists among the environment variables
 def check_env_variable_written(path, variable_name):
     # Read the current lines from the .env file
     if os.path.exists(path):
@@ -77,25 +57,28 @@ def set_spotify_authentication():
     write_env_variable(env_file_path, 'SPOTIFY_SECRET', spotify_secret)
     print("Spotify Client ID and Secret Key have been added to the .env file.")
 
+def setup_ssh():
+    # Check for existing SSH keys
+    ssh_dir = os.path.expanduser('~/.ssh')
+    if not os.path.exists(ssh_dir):
+        os.makedirs(ssh_dir)
+    ssh_key_path = os.path.join(ssh_dir, 'id_ed25519')
+
+    if not os.path.exists(ssh_key_path):
+        print("No SSH key found, generating a new SSH key...")
+        email = input("Please enter your email address for SSH key: ")
+        run_command(f'ssh-keygen -t ed25519 -C "{email}" -f "{ssh_key_path}" -N ""')
+
+    # Start the ssh-agent and add the key
+    print("Starting the ssh-agent...")
+    run_command('eval "$(ssh-agent -s)"', print_output=True)
+    run_command(f'ssh-add "{ssh_key_path}"', print_output=True)
 
 
 
-# Check for existing SSH keys
-ssh_dir = os.path.expanduser('~/.ssh')
-if not os.path.exists(ssh_dir):
-    os.makedirs(ssh_dir)
-ssh_key_path = os.path.join(ssh_dir, 'id_ed25519')
 
-if not os.path.exists(ssh_key_path):
-    print("No SSH key found, generating a new SSH key...")
-    email = input("Please enter your email address for SSH key: ")
-    run_command(f'ssh-keygen -t ed25519 -C "{email}" -f "{ssh_key_path}" -N ""')
-
-# Start the ssh-agent and add the key
-print("Starting the ssh-agent...")
-run_command('eval "$(ssh-agent -s)"', print_output=True)
-run_command(f'ssh-add "{ssh_key_path}"', print_output=True)
-
+#This probably isn't nessisary anymore
+#setup_ssh()
 
 #Set up the virtual environment and enter it
 print('Setting up the virtual environment...')
