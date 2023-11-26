@@ -11,7 +11,7 @@ def run_command(command, print_output=True):
         if print_output:
             print(process.stdout)
     else:
-        print(f"Error running command '{command}': {process.stderr}")
+        print(f"Error running command '{command}': {process.stdout}")
         exit(process.returncode)
     return process.stdout.strip()
 
