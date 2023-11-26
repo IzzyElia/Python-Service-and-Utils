@@ -16,6 +16,20 @@ def run_command(command, print_output=True):
     return process.stdout.strip()
 
 
+# Function to ensure python3-venv is installed
+def install_python_venv():
+    # Check if venv is available in python3
+    res = run_command('dpkg -s python3-venv', print_output=False)
+
+    if 'is not installed' in res:
+        print('python3-venv is not installed. Installing now...')
+        install_command = 'sudo apt-get update && sudo apt-get install -y python3-venv'
+        run_command(install_command)
+        print('python3-venv has been installed.')
+    else:
+        print('python3-venv is already installed.')
+
+
 #Check if variable exists among the environment variables
 def check_env_variable_written(path, variable_name):
     # Read the current lines from the .env file
@@ -77,10 +91,13 @@ def setup_ssh():
 
 
 
-#This probably isn't nessisary anymore
+# This probably isn't nessisary anymore
 #setup_ssh()
 
-#Set up the virtual environment and enter it
+# Make sure python3-venv is installed
+install_python_venv()
+
+# Set up the virtual environment and enter it
 print('Setting up the virtual environment...')
 run_command('python3 -m venv venv')
 run_command('source venv/bin/activate')
