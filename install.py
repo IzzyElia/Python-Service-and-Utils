@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import subprocess
+from crontab import CronTab
 
 
 # Function to run shell commands
@@ -71,11 +72,6 @@ def set_pushover_authentication():
     print("Pushover API Token has been added to the .env file.")
 
 
-
-
-# This probably isn't nessisary anymore
-#setup_ssh()
-
 # Make sure python3-venv is installed
 if os.name == "Linux":
     install_python_venv()
@@ -84,6 +80,13 @@ if os.name == "Linux":
 print('Setting up the virtual environment...')
 run_command('python3 -m venv venv')
 run_command('venv/bin/python -m pip install -r requirements.txt')
+
+print('setting up the scheduler...')
+# Access the current user's cron tab
+cron = CronTab(user='root')
+# Find the job and remove it
+job = cron.new(command='echo hello_world')
+cron.write()
 
 
 # Set environment variables for Spotify in a local .env file
@@ -106,6 +109,7 @@ else:
     set_pushover_authentication()
 
 
+print("Script unscheduled")
 
 
 # Output the public ssh key contents to the user to they can quickly copy them

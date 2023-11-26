@@ -37,12 +37,8 @@ def send_local_notification(title, message):
     if os_name == "Darwin":  # macOS
         script = f'display notification "{message}" with title "{title}"'
         subprocess.run(["osascript", "-e", script])
-    elif os_name == "Windows":
-        print("No windows support yet")
-    elif os_name == "Linux":
-        print("No windows support yet")
     else:
-        print("Unsupported operating system for notifications.")
+        print("Unsupported operating system for local notifications.")
 
 if __name__ == "__main__":
     # Example usage
