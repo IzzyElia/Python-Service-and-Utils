@@ -40,10 +40,11 @@ def send_local_notification(title, message):
     elif os_name == "Windows":
         print("No windows support yet")
     elif os_name == "Linux":
-        subprocess.run(["notify-send", title, message])
+        print("No windows support yet")
     else:
         print("Unsupported operating system for notifications.")
 
 if __name__ == "__main__":
     # Example usage
+    send_pushover_notification("Test notification")
     send_local_notification("Test Title", "This is a test notification.")
