@@ -92,8 +92,7 @@ install_python_venv()
 # Set up the virtual environment and enter it
 print('Setting up the virtual environment...')
 run_command('python3 -m venv venv')
-run_command('source venv/bin/activate')
-run_command('pip install -r requirements.txt')
+run_command('venv/bin/python -m pip install -r requirements.txt')
 
 
 # Set environment variables for Spotify in a local .env file
