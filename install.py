@@ -96,7 +96,7 @@ run_command('venv/bin/python -m pip install -r requirements.txt')
 
 
 # Set environment variables for Spotify in a local .env file
-env_file_path = 'venv/.env'  # You can specify a path to the .env file if needed
+env_file_path = '.env'  # You can specify a path to the .env file if needed
 
 # Check if .env file exists, if not, create it
 if not os.path.exists(env_file_path):

@@ -17,6 +17,7 @@ def show_new_releases():
         for release in new_releases:
             notification += f'{release["artist"]} by {release["artist"]}\n'
         send_local_notification("New Releases", notification)
+        print("New Releases", notification)
         last_release_checker.update_log(new_releases)
 
 # Press the green button in the gutter to run the script.
