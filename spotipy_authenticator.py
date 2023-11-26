@@ -4,16 +4,6 @@ from spotipy.oauth2 import SpotifyOAuth
 import os
 from dotenv import load_dotenv
 
-# Function to load authentication details from a file
-def load_auth_details(auth_file):
-    auth_details = {}
-    with open(auth_file, 'r') as file:
-        for line in file:
-            if ':' in line:
-                item, value = line.strip().split(':', 1)
-                auth_details[item] = value
-    return auth_details
-
 
 
 
