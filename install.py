@@ -112,10 +112,10 @@ else:
 
 
 # Output the public ssh key contents to the user to they can quickly copy them
-with open(f"{ssh_key_path}.pub", 'r') as public_key_file:
-    public_key = public_key_file.read()
-    print("Your public SSH key is:\n")
-    print(public_key)
+#with open(f"{ssh_key_path}.pub", 'r') as public_key_file:
+#    public_key = public_key_file.read()
+#    print("Your public SSH key is:\n")
+#    print(public_key)
 
 
 # Reminder to load the .env file in their development environment
