@@ -1,2 +1,0 @@
-ignore venv
-ignore update_config.txt
