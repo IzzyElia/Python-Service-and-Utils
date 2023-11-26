@@ -63,22 +63,12 @@ def set_spotify_authentication():
     write_env_variable(env_file_path, 'SPOTIFY_SECRET', spotify_secret)
     print("Spotify Client ID and Secret Key have been added to the .env file.")
 
-def setup_ssh():
-    # Check for existing SSH keys
-    ssh_dir = os.path.expanduser('~/.ssh')
-    if not os.path.exists(ssh_dir):
-        os.makedirs(ssh_dir)
-    ssh_key_path = os.path.join(ssh_dir, 'id_ed25519')
-
-    if not os.path.exists(ssh_key_path):
-        print("No SSH key found, generating a new SSH key...")
-        email = input("Please enter your email address for SSH key: ")
-        run_command(f'ssh-keygen -t ed25519 -C "{email}" -f "{ssh_key_path}" -N ""')
-
-    # Start the ssh-agent and add the key
-    print("Starting the ssh-agent...")
-    run_command('eval "$(ssh-agent -s)"', print_output=True)
-    run_command(f'ssh-add "{ssh_key_path}"', print_output=True)
+def set_pushover_authentication():
+    pushover_user_key = input("Please enter your Pushover User Key: ")
+    pushover_api_token = input("Please enter your Pushover API Token: ")
+    write_env_variable(env_file_path, 'PUSHOVER_API_TOKEN', pushover_api_token)
+    write_env_variable(env_file_path, 'PUSHOVER_USER_KEY', pushover_user_key)
+    print("Pushover API Token has been added to the .env file.")
 
 
 
@@ -107,6 +97,15 @@ if check_env_variable_written(env_file_path, 'SPOTIFY_CLIENT_ID') or check_env_v
         set_spotify_authentication()
 else:
     set_spotify_authentication()
+
+if check_env_variable_written(env_file_path, 'PUSHOVER_API_TOKEN'):
+    if input('Pushover API information found. Update it? (y/n)').lower() == 'y':
+        set_pushover_authentication()
+else:
+    set_pushover_authentication()
+
+while True:
+    print ()
 
 
 

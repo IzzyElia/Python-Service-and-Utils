@@ -1,25 +1,31 @@
 import subprocess
 import platform
 import requests
+import os
+from dotenv import load_dotenv
 
 def send_pushover_notification(message):
-    auth_details = {}
-    with open('pushover-auth.txt', 'r') as file:
-        for line in file:
-            if ':' in line:
-                item, value = line.strip().split(':', 1)
-                auth_details[item] = value
+    load_dotenv()
+
+    try:
+        pushover_api_token = os.environ['PUSHOVER_API_TOKEN']
+    except KeyError:
+        raise KeyError("Environment variable 'PUSHOVER_API_TOKEN' is not set")
+    try:
+        pushover_user_key = os.environ['PUSHOVER_USER_KEY']
+    except KeyError:
+        raise KeyError("Environment variable 'PUSHOVER_USER_KEY' is not set")
 
     payload = {
-        'token': auth_details['api_token'],
-        'user': auth_details['user_key'],
+        'token': pushover_api_token,
+        'user': pushover_user_key,
         'message': message
     }
     response = requests.post('https://api.pushover.net/1/messages.json', data=payload)
     if response.status_code == 200:
         print(f'Notification sent successfully - {message}')
     else:
-        print('Failed to send notification.')
+        print(f'Failed to send notification: {response.text}')
     return response.status_code
 
 
